@@ -83,3 +83,5 @@ Private Sub InitializeView()
     This.Context.Bindings.Apply This.ViewModel
 End Sub
 ```
+
+![the ExampleDynamicView at run-time](https://user-images.githubusercontent.com/5751684/97099723-9fe31e80-1662-11eb-83c3-44ab8764dd75.png)
