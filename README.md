@@ -1,71 +1,85 @@
 # MVVM in VBA!
 
-Thanks to [Rubberduck](https://github.com/rubberduck-vba/Rubberduck), object-oriented programming in VBA is easier than ever; large projects with dozens of class modules can now be neatly organized in a custom folder hierarchy, for example.
+With [Rubberduck](https://github.com/rubberduck-vba/Rubberduck), object-oriented programming in VBA is easier than ever: large projects with many small and specialized class modules can be neatly organized in a custom folder hierarchy, for one.
 
-This project demonstrates that not only OOP but also *Model-View-ViewModel* can be leveraged in VBA, mainly for educational and inspirational purposes.
+This project demonstrates that not only OOP but also *Model-View-ViewModel* can be leveraged in VBA, mainly for educational and inspirational purposes. 
 
-# MVVM Infrastructure Overview
+## Features
 
-**Model-View-ViewModel** is an object-oriented UI design pattern that makes it easier to write decoupled, modular applications a user needs to interact with. The main components are the *model*, the *view*, and the *view model*.
+The 100+ modules solve many problems related to building and programming user interfaces in VBA, and provide an object model that gives an application a solid, decoupled backbone structure.
 
-Creating an MVVM application in VBA begins with an `AppContext` object instance, which provides the MVVM infrastructure API and gives you `BindingManager`, `CommandManager`, and `ValidationManager` objects. See the [API] worksheet for documentation and example usage.
+### Object Model
 
----
+The `IAppContext` interface, and its `AppContext` implementation, are at the top of the MVVM object model. This *context* object exposes `IBindingManager`, `ICommandManager`, and `IValidationManager` objects (among others), each holding their own piece of the application's state (property bindings, command bindings, and binding validation errors, respectively).
 
-## Model
+### Property Bindings
 
-The **Model** is your application's data and the objects responsible for retrieving it.
-It might consist of multiple classes, including services abstracting database operations, for example.
-It's also "data transfer objects" (DTO) that carry data from a source: classes with nothing but read/write properties (or public fields).
+The `INotifyPropertyChanged` interface allows property bindings to work both from the source (ViewModel) to the target (UI controls), and from the target to the source. Hence, by implementing this interface on ViewModel classes, UI code can bind a ViewModel property to a `MSForms.TextBox` control (or anything), via the `IBindingManager.BindPropertyPath` method - by letting the manager infer most of everything...
 
-This project provides no out-of-the-box infrastructure code for the model component, because the model is inherently application-specific.
-
-## View
-
-The **View** is how your application communicates with its user, and how the user communicates with the application.
-The role of the view is to present the **ViewModel** to the user, being strictly concerned with presentation.
-
-The **View** is responsible for everything directly related to the user interface (UI), and should implement the **IView** interface.
-
-![IView interface](https://user-images.githubusercontent.com/5751684/97098041-f8102580-164e-11eb-884b-85d6348b6cac.png)
-
-### Dependencies
-In order to function properly with MVVM, the **View** should hold an instance-level reference to the `IAppContext` interface.
-Additionally, in order to configure the property bindings the **View** will require a reference to a specific **ViewModel** object/type.
-
-### Remarks
-Modal dialogs that can be cancelled should implement the `ICancellable` interface.
-The code-behind module contains member calls against the `IAppContext` object model, to configure property and command bindings for the **View**.
-
-## ViewModel
-
-![INotifyPropertyChanged interface](https://user-images.githubusercontent.com/5751684/97098071-458c9280-164f-11eb-98f6-2483a25f1e0a.png)
-
-The **ViewModel** is how the magic happens. View models should implement the `INotifyPropertyChanged` interface.
-Moreover, `Property Let` procedures should only conditionally assign the backing instance state, and invoke the `OnPropertyChanged` method:
-
-```vb
-Public Property Let StringProperty(ByVal RHS As String)
-    If This.StringProperty <> RHS Then
-        This.StringProperty = RHS
-        OnPropertyChanged "StringProperty"
-    End If
-End Property
-
-Private Sub OnPropertyChanged(ByVal PropertyName As String)
-    This.Notifier.OnPropertyChanged Me, PropertyName
-End Sub
+```vba
+With Context.Bindings 'where Context is an IAppContext object reference
+    ' use IBindingManager.BindPropertyPath to bind a ViewModel property to a property of a MSForms control target.
+    .BindPropertyPath ViewModel, "Instructions", Me.InstructionsLabel
+End With
 ```
 
-### Dependencies
+...or by configuring every aspect of the binding explicitly.
 
-In order to facilitate and standardize implementing `INotifyPropertyChanged`, the MVVM infrastructure provides the `PropertyChangeNotifierBase` class. The object reference for this dependency can be assigned in the `Class_Initialize` handler procedure:
+### Validation
 
-```vb
-Private Sub Class_Initialize()
-    Set This.Notifier = New PropertyChangeNotifierBase
-End Sub
+Application code may implement the `IValueValidator` interface to supply a property binding with a `Validator` argument. Bindings that fail validation use the default *dynamic error adorner* (that was configured when the top-level `AppContext` is created) to display configurable visual indicators (border, background, font colors, but also dynamic tooltips, icons, and labels); when the binding is valid again, the visual cues are hidden and the `IValidationManager` holds no more `IValidationError` objects in its `ValidationErrors` collection for the ViewModel's binding context (each ViewModel gets its own "validation scope").
+
+By default, an invalid field visually looks like this:
+
+![an invalid string property binding with the default dynamic adorner shown](https://user-images.githubusercontent.com/5751684/97099459-ac19ac80-165f-11eb-9430-7fda96dc4d8b.png)
+
+
+### Command Bindings
+
+The `ICommand` interface can be implemented for anything that needs to happen in response to the user clicking a button: in MVVM you don't handle `Click` events anymore, instead you *bind* an implementation of the `ICommand` interface to a `MSForms.CommandButton` control: the MVVM infrastructure code automatically takes care to enable or disable that control (you provide the `ICommand.CanExecute` Boolean logic, MVVM automatically invokes it).
+
+```vba
+With Context.Commands 'where Context is an IAppContext object reference
+    ' use ICommandManager.BindCommand to bind a MSForms.CommandButton to any ICommand object.
+    .BindCommand ViewModel, Me.CommandButton1, ViewModel.SomeCommand
+End With
 ```
 
-A **ViewModel** may also expose multiple `ICommand` properties that the **View** can use to configure command bindings.
-The MVVM infrastructure API provides `AcceptCommand` and `CancelCommand` standard commands; application-specific commands should be implemented as needed.
+### Dynamic UI
+
+This part of the API is still very much subject to breaking changes since it's very much alpha-stage, but the idea is to provide an API to make it easy to programmatically *generate* a user interface from VBA code, and automatically create the associated property and command bindings.
+
+Whether your UI is dynamic or made at design-time, the recommendation would be to create the bindings in a dedicated `InitializeView` procedure in the form's code-behind.
+
+This example snippet is from the `ExampleDynamicView` module - remember to invoke `IBindingManager.Apply` to bring it all to life:
+
+```vba
+Private Sub InitializeView()
+    
+    Dim Layout As IContainerLayout
+    Set Layout = ContainerLayout.Create(Me.Controls, TopToBottom)
+    
+    With DynamicControls.Create(This.Context, Layout)
+        
+        With .LabelFor("All controls on this form are created at run-time.")
+            .Font.Bold = True
+        End With
+        
+        .LabelFor BindingPath.Create(This.ViewModel, "Instructions")
+        
+        .TextBoxFor BindingPath.Create(This.ViewModel, "StringProperty"), _
+                    Validator:=New RequiredStringValidator, _
+                    TitleSource:="Some String:"
+                    
+        .TextBoxFor BindingPath.Create(This.ViewModel, "CurrencyProperty"), _
+                    FormatString:="{0:C2}", _
+                    Validator:=New DecimalKeyValidator, _
+                    TitleSource:="Some Amount:"
+        
+        .CommandButtonFor AcceptCommand.Create(Me, This.Context.Validation), This.ViewModel, "Close"
+        
+    End With
+    
+    This.Context.Bindings.Apply This.ViewModel
+End Sub
+```
