@@ -19,14 +19,14 @@ Private This As TState
 '@Description "Tracks a new invoke of the specified member."
 Public Sub OnInvoke(ByVal MemberName As String)
 Attribute OnInvoke.VB_Description = "Tracks a new invoke of the specified member."
-    Dim newValue As Long
+    Dim NewValue As Long
     If This.MemberInvokes.Exists(MemberName) Then
-        newValue = This.MemberInvokes.Item(MemberName) + 1
+        NewValue = This.MemberInvokes.Item(MemberName) + 1
         This.MemberInvokes.Remove MemberName
     Else
-        newValue = 1
+        NewValue = 1
     End If
-    This.MemberInvokes.Add MemberName, newValue
+    This.MemberInvokes.Add MemberName, NewValue
     Debug.Print TypeName(Me) & ": OnInvoke(" & MemberName & ") was invoked"
 End Sub
 

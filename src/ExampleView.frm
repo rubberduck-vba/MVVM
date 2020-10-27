@@ -68,12 +68,12 @@ Public Property Set ViewModel(ByVal RHS As ExampleViewModel)
 End Property
 
 '@Description "Gets/sets the MVVM application context."
-Public Property Get Context() As MVVM.AppContext
+Public Property Get Context() As MVVM.IAppContext
 Attribute Context.VB_Description = "Gets/sets the MVVM application context."
     Set Context = This.Context
 End Property
 
-Public Property Set Context(ByVal RHS As MVVM.AppContext)
+Public Property Set Context(ByVal RHS As MVVM.IAppContext)
     GuardClauses.GuardDefaultInstance Me, ExampleView, TypeName(Me)
     GuardClauses.GuardDoubleInitialization This.Context, TypeName(Me)
     GuardClauses.GuardNullReference RHS
@@ -119,6 +119,7 @@ Private Sub BindViewModelProperties()
         .BindPropertyPath ViewModel, "SomeDate", Me.TextBox1, _
             StringFormat:="{0:MMMM dd, yyyy}", _
             Converter:=StringToDateConverter.Default, _
+            Validator:=New RequiredStringValidator, _
             ValidationAdorner:=ValidationErrorAdorner.Create( _
                 Target:=Me.TextBox1, _
                 TargetFormatter:=ValidationErrorFormatter.WithErrorBorderColor.WithErrorBackgroundColor)
