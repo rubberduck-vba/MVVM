@@ -264,7 +264,7 @@ Private Property Get CanApplyToTarget() As Boolean
     CanApplyToTarget = Not This.Applying And This.Mode <> OneWayToSource And (This.Mode <> OneTimeBinding Or Not This.Applied)
 End Property
 
-Public Sub ApplyToTarget(Optional ByVal ValidationValue As Variant)
+Public Sub ApplyToTarget()
 'reads from the source and writes to the target.
     
     If Not CanApplyToTarget Then Exit Sub

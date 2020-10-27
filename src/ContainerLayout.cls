@@ -23,11 +23,6 @@ Private Type TState
     Margin As Long
 End Type
 
-Public Enum LayoutDirection
-    TopToBottom
-    LeftToRight
-End Enum
-
 Private Const DefaultMargin As Long = 3
 
 Private This As TState

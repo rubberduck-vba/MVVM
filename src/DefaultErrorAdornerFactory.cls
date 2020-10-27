@@ -7,8 +7,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
-'@Exposed
+Attribute VB_Description = "A factory that creates default validation error adorners."
 '@Folder MVVM.Infrastructure.View.Dynamic
+'@ModuleDescription "A factory that creates default validation error adorners."
+'@Exposed
 Option Explicit
 Implements IDynamicAdornerFactory
 
@@ -17,10 +19,10 @@ Private Function IDynamicAdornerFactory_Create(ByVal Target As Object) As IDynam
     Select Case True
         
         Case TypeOf Target Is MSForms.TextBox
-            Set Result = ValidationErrorAdorner.Create(Target, LabelPosition:=AdornerPosition.Create(AboveLeft, 0))
+            Set Result = ValidationErrorAdorner.Create(Target, LabelPosition:=DynamicControlPosition.Create(AboveLeft, 0))
         
         Case TypeOf Target Is MSForms.ComboBox
-            Set Result = ValidationErrorAdorner.Create(Target, IconPosition:=AdornerPosition.Create(InsideRight, 0, TopMargin:=3, RightMargin:=12))
+            Set Result = ValidationErrorAdorner.Create(Target, IconPosition:=DynamicControlPosition.Create(InsideRight, 0, TopMargin:=3, RightMargin:=12))
         
         Case Else
             Debug.Print "A dynamic adorner was requested, but the target type isn't supported."

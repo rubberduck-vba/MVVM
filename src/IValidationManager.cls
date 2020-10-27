@@ -21,10 +21,12 @@ End Property
 
 '@Description "Gets the IValidationError for the specified binding path, if it exists."
 Public Property Get ValidationError(ByVal BindingPath As IBindingPath) As IValidationError
+Attribute ValidationError.VB_Description = "Gets the IValidationError for the specified binding path, if it exists."
 End Property
 
 '@Description "Gets the factory used for creating the default validation error adorners."
 Public Property Get AdornerFactory() As IDynamicAdornerFactory
+Attribute AdornerFactory.VB_Description = "Gets the factory used for creating the default validation error adorners."
 End Property
 
 '@Description "Adds the specified validation error to the validation context."

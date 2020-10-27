@@ -114,7 +114,7 @@ Private Property Get IPropertyBinding_Target() As IBindingPath
 End Property
 
 Private Property Get IPropertyBinding_UpdateSourceTrigger() As BindingUpdateSourceTrigger
-    If This.Base.UpdateSourceTrigger = OnPropertyChanged Then This.Base.ApplyToSource
+    IPropertyBinding_UpdateSourceTrigger = This.Base.UpdateSourceTrigger
 End Property
 
 Private Property Get IPropertyBinding_Validator() As IValueValidator

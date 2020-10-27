@@ -43,6 +43,7 @@ Optional ByVal Validation As MVVM.IValidationManager, _
 Optional ByVal FormatterFactory As MVVM.IStringFormatterFactory, _
 Optional ByVal AdornerFactory As MVVM.IDynamicAdornerFactory, _
 Optional ByVal DebugOutput As Boolean = False) As MVVM.AppContext
+Attribute Create.VB_Description = "Creates a new MVVM application context."
     
     GuardClauses.GuardNonDefaultInstance Me, MVVM.AppContext
     

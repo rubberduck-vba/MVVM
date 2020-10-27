@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 Attribute VB_Description = "Builds dynamic MSForms UI components from a binding source."
-'@Folder MVVM.Infrastructure.View.Dynamic
+'@Folder "MVVM.Infrastructure.StringFormatting.View.Dynamic"
 '@ModuleDescription "Builds dynamic MSForms UI components from a binding source."
 '@PredeclaredId
 '@Exposed
@@ -211,3 +211,4 @@ Private Function IDynamicControlBuilder_TextBoxFor(ByVal SourceValue As IBinding
     Set IDynamicControlBuilder_TextBoxFor = Result
     
 End Function
+
