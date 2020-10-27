@@ -4,6 +4,10 @@ With [Rubberduck](https://github.com/rubberduck-vba/Rubberduck), object-oriented
 
 This project demonstrates that not only OOP but also *Model-View-ViewModel* can be leveraged in VBA, mainly for educational and inspirational purposes. 
 
+## [Getting Started](https://github.com/retailcoder/MVVM/wiki)
+
+Please see the wiki section.
+
 ## Features
 
 The 100+ modules solve many problems related to building and programming user interfaces in VBA, and provide an object model that gives an application a solid, decoupled backbone structure.
@@ -84,4 +88,4 @@ Private Sub InitializeView()
 End Sub
 ```
 
-![the ExampleDynamicView at run-time](https://user-images.githubusercontent.com/5751684/97099723-9fe31e80-1662-11eb-83c3-44ab8764dd75.png)
+![the ExampleDynamicView at run-time](https://user-images.githubusercontent.com/5751684/97261293-e8cadc80-17f4-11eb-9c01-5733632a05fe.png)
