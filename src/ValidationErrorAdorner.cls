@@ -28,8 +28,8 @@ Private Type TState
     IconFormatter As MVVM.IValidationErrorFormatter
     IconControl As MSForms.Control
     
-    LabelPosition As IAdornerPosition
-    IconPosition As IAdornerPosition
+    LabelPosition As IDynamicPosition
+    IconPosition As IDynamicPosition
     
     LabelPositionSet As Boolean
     IconPositionSet As Boolean
@@ -43,10 +43,10 @@ Public Function Create(ByVal Target As MSForms.Control, _
 Optional ByVal TargetFormatter As MVVM.IValidationErrorFormatter = Nothing, _
 Optional ByVal AdornerLabel As Variant, _
 Optional ByVal LabelFormatter As MVVM.IValidationErrorFormatter = Nothing, _
-Optional ByVal LabelPosition As MVVM.IAdornerPosition = Nothing, _
+Optional ByVal LabelPosition As MVVM.IDynamicPosition = Nothing, _
 Optional ByVal AdornerIcon As Variant, _
 Optional ByVal IconFormatter As MVVM.IValidationErrorFormatter = Nothing, _
-Optional ByVal IconPosition As MVVM.IAdornerPosition = Nothing) As IDynamicAdorner
+Optional ByVal IconPosition As MVVM.IDynamicPosition = Nothing) As IDynamicAdorner
     
     GuardClauses.GuardNonDefaultInstance Me, ValidationErrorAdorner
     GuardClauses.GuardNullReference Target, TypeName(Me)
@@ -87,7 +87,7 @@ Private Sub InitTarget(ByVal Result As ValidationErrorAdorner, ByVal Target As O
     End If
 End Sub
 
-Private Sub InitLabel(ByVal Result As ValidationErrorAdorner, ByRef AdornerLabel As Variant, ByRef Formatter As IValidationErrorFormatter, ByRef Position As IAdornerPosition)
+Private Sub InitLabel(ByVal Result As ValidationErrorAdorner, ByRef AdornerLabel As Variant, ByRef Formatter As IValidationErrorFormatter, ByRef Position As IDynamicPosition)
     If Position Is Nothing Then Set Position = DefaultLabelPosition
     
     If AdornerLabel Is Nothing Then
@@ -115,7 +115,7 @@ Private Sub InitLabel(ByVal Result As ValidationErrorAdorner, ByRef AdornerLabel
     End If
 End Sub
 
-Private Sub InitIcon(ByVal Result As ValidationErrorAdorner, ByRef AdornerIcon As Variant, ByRef Formatter As IValidationErrorFormatter, ByRef Position As IAdornerPosition)
+Private Sub InitIcon(ByVal Result As ValidationErrorAdorner, ByRef AdornerIcon As Variant, ByRef Formatter As IValidationErrorFormatter, ByRef Position As IDynamicPosition)
     If Position Is Nothing Then Set Position = DefaultIconPosition
     
     If AdornerIcon Is Nothing Then
@@ -161,8 +161,8 @@ Private Property Get DefaultLabelFormatter() As MVVM.IValidationErrorFormatter
         .WithTargetOnlyVisibleOnError
 End Property
 
-Private Property Get DefaultLabelPosition() As MVVM.IAdornerPosition
-    Set DefaultLabelPosition = AdornerPosition.Create(RelativePosition.BelowRight, 3, 0)
+Private Property Get DefaultLabelPosition() As MVVM.IDynamicPosition
+    Set DefaultLabelPosition = DynamicControlPosition.Create(RelativePosition.BelowRight, 3, 0)
 End Property
 
 Private Property Get DefaultIconFormatter() As MVVM.IValidationErrorFormatter
@@ -171,8 +171,8 @@ Private Property Get DefaultIconFormatter() As MVVM.IValidationErrorFormatter
         .WithTargetOnlyVisibleOnError
 End Property
 
-Private Property Get DefaultIconPosition() As MVVM.IAdornerPosition
-    Set DefaultIconPosition = AdornerPosition.Create(RelativePosition.InsideRight, 3)
+Private Property Get DefaultIconPosition() As MVVM.IDynamicPosition
+    Set DefaultIconPosition = DynamicControlPosition.Create(RelativePosition.InsideRight, 3)
 End Property
 
 Friend Property Get Target() As Object
@@ -197,7 +197,7 @@ Public Property Get Visible() As Boolean
     Visible = This.Visible
 End Property
 
-Private Sub PositionAdornerControlX(ByVal Target As MSForms.Control, ByVal Adorner As MSForms.Control, ByVal Position As IAdornerPosition)
+Private Sub PositionAdornerControlX(ByVal Target As MSForms.Control, ByVal Adorner As MSForms.Control, ByVal Position As IDynamicPosition)
     Select Case Position.Position
     
         Case RelativePosition.AboveRight, _
@@ -228,7 +228,7 @@ Private Sub TrySetTextAlign(ByVal Target As Object, ByVal Value As MSForms.fmTex
     On Error GoTo 0
 End Sub
 
-Private Sub PositionAdornerControlY(ByVal Target As MSForms.Control, ByVal Adorner As MSForms.Control, ByVal Position As IAdornerPosition)
+Private Sub PositionAdornerControlY(ByVal Target As MSForms.Control, ByVal Adorner As MSForms.Control, ByVal Position As IDynamicPosition)
     Select Case Position.Position
     
         Case RelativePosition.AboveLeft, _
@@ -267,11 +267,11 @@ Friend Property Set AdornerLabelFormatter(ByVal RHS As IValidationErrorFormatter
     Set This.LabelFormatter = RHS
 End Property
 
-Friend Property Get AdornerLabelPosition() As IAdornerPosition
+Friend Property Get AdornerLabelPosition() As IDynamicPosition
     Set AdornerLabelPosition = This.LabelPosition
 End Property
 
-Friend Property Set AdornerLabelPosition(ByVal RHS As IAdornerPosition)
+Friend Property Set AdornerLabelPosition(ByVal RHS As IDynamicPosition)
     Set This.LabelPosition = RHS
 End Property
 
@@ -292,11 +292,11 @@ Friend Property Set AdornerIconFormatter(ByVal RHS As IValidationErrorFormatter)
     Set This.IconFormatter = RHS
 End Property
 
-Friend Property Get AdornerIconPosition() As IAdornerPosition
+Friend Property Get AdornerIconPosition() As IDynamicPosition
     Set AdornerIconPosition = This.IconPosition
 End Property
 
-Friend Property Set AdornerIconPosition(ByVal RHS As IAdornerPosition)
+Friend Property Set AdornerIconPosition(ByVal RHS As IDynamicPosition)
     Set This.IconPosition = RHS
 End Property
 
@@ -349,3 +349,5 @@ Private Sub ShowAdornerIcon(ByVal Message As String)
         This.IconPositionSet = True
     End If
 End Sub
+
+
