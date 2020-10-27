@@ -4,9 +4,9 @@ With [Rubberduck](https://github.com/rubberduck-vba/Rubberduck), object-oriented
 
 This project demonstrates that not only OOP but also *Model-View-ViewModel* can be leveraged in VBA, mainly for educational and inspirational purposes. 
 
-## [Getting Started](https://github.com/retailcoder/MVVM/wiki)
+## [Getting Started](https://github.com/rubberduck-vba/MVVM/wiki)
 
-Please see the wiki section.
+The wiki section should be a good place to start, right after this overview :)
 
 ## Features
 
