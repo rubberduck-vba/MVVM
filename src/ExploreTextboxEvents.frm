@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ExploreTextboxEvents 
    Caption         =   "UserForm1"
-   ClientHeight    =   1116
-   ClientLeft      =   -24
-   ClientTop       =   -108
-   ClientWidth     =   936
+   ClientHeight    =   1404
+   ClientLeft      =   -48
+   ClientTop       =   -192
+   ClientWidth     =   744
    OleObjectBlob   =   "ExploreTextboxEvents.frx":0000
    StartUpPosition =   1  'CenterOwner
 End

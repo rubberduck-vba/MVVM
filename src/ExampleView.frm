@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ExampleView 
    Caption         =   "ExampleView"
-   ClientHeight    =   480
-   ClientLeft      =   -144
-   ClientTop       =   -420
-   ClientWidth     =   528
+   ClientHeight    =   612
+   ClientLeft      =   -156
+   ClientTop       =   -516
+   ClientWidth     =   420
    OleObjectBlob   =   "ExampleView.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
