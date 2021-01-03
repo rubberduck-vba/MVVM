@@ -128,6 +128,9 @@ End Sub
 
 Private Sub IHandleControlEvents_HandleBeforeUpdate(ByRef Cancel As Boolean)
 End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox
+Private Sub IHandleControlEvents_HandleChange()
+End Sub
 
 Private Sub IHandleControlEvents_HandleEnter()
 End Sub

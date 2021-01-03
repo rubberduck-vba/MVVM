@@ -39,7 +39,7 @@ Private Sub IBindingManager_Apply(ByVal Source As Object)
     This.Stub.OnInvoke "Apply"
 End Sub
 
-Private Function IBindingManager_BindPropertyPath(ByVal Source As Object, ByVal PropertyPath As String, ByVal Target As Object, _
+'Private Function IBindingManager_BindPropertyPath(ByVal Source As Object, ByVal PropertyPath As String, ByVal Target As Object, _
 Optional ByVal TargetProperty As String, _
 Optional ByVal Mode As BindingMode = 0&, _
 Optional ByVal UpdateTrigger As BindingUpdateSourceTrigger = 1&, _
@@ -47,7 +47,16 @@ Optional ByVal Validator As IValueValidator, _
 Optional ByVal Converter As IValueConverter, _
 Optional ByVal FormatString As String, _
 Optional ByVal ValidationAdorner As IDynamicAdorner) As IPropertyBinding
-    
+'VF: changed default UpdateTrigger due to revised enum BindingUpdateSourceTrigger
+Private Function IBindingManager_BindPropertyPath(ByVal Source As Object, ByVal PropertyPath As String, ByVal Target As Object, _
+Optional ByVal TargetProperty As String, _
+Optional ByVal Mode As BindingMode = 0&, _
+Optional ByVal UpdateTrigger As BindingUpdateSourceTrigger = 2&, _
+Optional ByVal Validator As IValueValidator, _
+Optional ByVal Converter As IValueConverter, _
+Optional ByVal FormatString As String, _
+Optional ByVal ValidationAdorner As IDynamicAdorner) As IPropertyBinding
+        
     This.Stub.OnInvoke "BindPropertyPath"
     
     Dim Binding As IPropertyBinding

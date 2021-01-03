@@ -38,7 +38,7 @@ Public Function Create(ByVal Context As IAppContext, ByVal StringFormatFactory A
     Result.DebugOutput = DebugOutput
     
     If StringFormatFactory Is Nothing Then
-        Set Result.StringFormatterFactory = New StringFormatterFactory
+        Set Result.StringFormatterFactory = New StringFormatterNetFactory
     Else
         Set Result.StringFormatterFactory = StringFormatFactory
     End If

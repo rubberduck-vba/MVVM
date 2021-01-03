@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ExampleView 
    Caption         =   "ExampleView"
-   ClientHeight    =   4716
-   ClientLeft      =   36
-   ClientTop       =   384
-   ClientWidth     =   6564
+   ClientHeight    =   480
+   ClientLeft      =   -144
+   ClientTop       =   -420
+   ClientWidth     =   528
    OleObjectBlob   =   "ExampleView.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -14,7 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Attribute VB_Description = "An example implementation of a View."
-
 '@Folder MVVM.Example
 '@ModuleDescription "An example implementation of a View."
 Implements IView

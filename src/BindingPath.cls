@@ -127,7 +127,7 @@ Private Sub IBindingPath_Resolve()
 End Sub
 
 Private Function IBindingPath_ToString() As String
-    IBindingPath_ToString = StringBuilder _
+    IBindingPath_ToString = StringBuilderNet _
         .AppendFormat("Context: {0}; Path: {1}", TypeName(This.Context), This.Path) _
         .ToString
 End Function

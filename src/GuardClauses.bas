@@ -72,7 +72,7 @@ Private Function GetDefaultValue(ByVal VType As VbVarType) As Variant
             Set GetDefaultValue = Nothing
 #If VBA7 Then
 #If Win64 Then
-        Case VbVarType.vbLongLong
+        Case VbVarType.vbLongLong 'VF: include longptr(?) if using GuardClauses with WinAPIs
             GetDefaultValue = 0
 #End If
 #End If

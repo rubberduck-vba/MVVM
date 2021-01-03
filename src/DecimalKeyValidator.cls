@@ -15,6 +15,7 @@ Option Explicit
 Implements IValueValidator
 
 Private SeparatorChar As String
+Private UpdtSourceTrigger As MVVM.BindingUpdateSourceTrigger 'avoid being called twice
 
 Private Sub Class_Initialize()
     SeparatorChar = VBA.Strings.Format$(0, ".")
@@ -53,9 +54,25 @@ Private Function IsBindingTargetEmpty(ByVal Target As IBindingPath) As Boolean
 End Function
 
 Private Property Get IValueValidator_Message() As String
-    IValueValidator_Message = "Value must be numeric."
+    'IValueValidator_Message = "Value must be numeric."
+    'VF: reworded to reflect different logic/trigger
+    IValueValidator_Message = "Numeric value required."
 End Property
 
 Private Property Get IValueValidator_Trigger() As BindingUpdateSourceTrigger
-    IValueValidator_Trigger = OnKeyPress
+    'VF: funnel through OnChange to capture cut/paste and backspace/delete
+    'avoid being called twice
+    If UpdtSourceTrigger = NotSetYet Then
+        Select Case MsgBox("Trigger validation of numeric textboxes 'OnChange'?" & vbCr & vbCr & "No = Trigger 'OnKeyPress' (as originally, which means not capturing cut/paste and backspace/delete in the textboxes)", vbQuestion + vbYesNo, TypeName(Me))
+            Case vbYes
+                'but deletes entire string ...as of now
+                'IValueValidator_Trigger = OnChange
+                UpdtSourceTrigger = OnChange
+            Case Else
+                'IValueValidator_Trigger = OnKeyPress
+                UpdtSourceTrigger = OnKeyPress
+        End Select
+    Else
+        IValueValidator_Trigger = UpdtSourceTrigger
+    End If
 End Property

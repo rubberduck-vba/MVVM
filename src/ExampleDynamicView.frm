@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ExampleDynamicView 
    Caption         =   "ExampleDynamicView"
-   ClientHeight    =   3552
-   ClientLeft      =   36
-   ClientTop       =   384
-   ClientWidth     =   4740
+   ClientHeight    =   228
+   ClientLeft      =   -432
+   ClientTop       =   -1428
+   ClientWidth     =   108
    OleObjectBlob   =   "ExampleDynamicView.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -27,12 +27,16 @@ End Type
 Private This As TState
 
 '@Description "Creates a new instance of this form."
-Public Function Create(ByVal Context As MVVM.IAppContext, ByVal ViewModel As ExampleViewModel) As IView
+Public Function Create(ByVal Context As MVVM.IAppContext, ByVal ViewModel As ExampleViewModel, ViewDims As TViewDims) As IView
 Attribute Create.VB_Description = "Creates a new instance of this form."
     Dim Result As ExampleDynamicView
     Set Result = New ExampleDynamicView
     Set Result.Context = Context
     Set Result.ViewModel = ViewModel
+    With Result
+        .Height = ViewDims.Height
+        .Width = ViewDims.Width
+    End With
     Set Create = Result
 End Function
 
@@ -52,6 +56,13 @@ Public Property Set ViewModel(ByVal RHS As Object)
     Set This.ViewModel = RHS
 End Property
 
+Public Sub SizeView(Height As Long, Width As Long)
+    With Me
+        .Height = Height
+        .Width = Width
+    End With
+End Sub
+
 Private Sub OnCancel()
     This.IsCancelled = True
     Me.Hide
@@ -70,6 +81,7 @@ Private Sub InitializeView()
         
         .LabelFor BindingPath.Create(This.ViewModel, "Instructions")
         
+        'VF: refactor free string to some enum PropertyName ("StringProperty", "CurrencyProperty") throughout (?) [when I frame a question mark in parentheses is not really a question but a rhetorical question, meaning I am pretty sure of the correct answer]
         .TextBoxFor BindingPath.Create(This.ViewModel, "StringProperty"), _
                     Validator:=New RequiredStringValidator, _
                     TitleSource:="Some String:"
@@ -79,6 +91,8 @@ Private Sub InitializeView()
                     Validator:=New DecimalKeyValidator, _
                     TitleSource:="Some Amount:"
         
+        'ToDo: 'VF: needs validation .CanExecute(This.Context) before .Show
+        '(as textbox1 has focus and is empty and when moving to this close button, tb1 is validated and OnClick is disabled leaving the user out in the rain)
         .CommandButtonFor AcceptCommand.Create(Me, This.Context.Validation), This.ViewModel, "Close"
         
     End With

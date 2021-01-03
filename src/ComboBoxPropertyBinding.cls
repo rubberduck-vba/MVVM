@@ -126,6 +126,9 @@ End Sub
 Private Sub IHandleControlEvents_HandleBeforeUpdate(ByRef Cancel As Boolean)
 End Sub
 
+Private Sub IHandleControlEvents_HandleChange()
+End Sub
+
 Private Sub IHandleControlEvents_HandleEnter()
 End Sub
 
