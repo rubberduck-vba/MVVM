@@ -33,3 +33,7 @@ End Sub
 Public Sub HandleBeforeUpdate(ByRef Cancel As Boolean)
 Attribute HandleBeforeUpdate.VB_Description = "A callback that handles the 'BeforeUpdate' event."
 End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox
+'@Description "A callback that handles the 'Change' event."
+Public Sub HandleChange()
+End Sub

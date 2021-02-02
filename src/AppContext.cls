@@ -51,7 +51,7 @@ Attribute Create.VB_Description = "Creates a new MVVM application context."
     Set Result = New MVVM.AppContext
     Result.DebugOutput = DebugOutput
     
-    'temporal coupling: IStringFormatterFactory instance needs to be set before we init the binding manager.
+    'temporal coupling: IStringFormatterVBFactory instance needs to be set before we init the binding manager.
     InitStringFormatterFactory Result, FormatterFactory
     
     'more temporal coupling...
@@ -68,10 +68,10 @@ Private Sub InitStringFormatterFactory(ByVal Context As MVVM.AppContext, ByVal F
         Select Case This.DefaultStringFormatSyntax
         
             Case StringFormatterStrategy.UseDotNetStringFormatSyntax
-                Set Factory = New MVVM.StringFormatterFactory
+                Set Factory = New MVVM.StringFormatterNetFactory
                 
             Case StringFormatterStrategy.UseVBStringFormatSyntax
-                Set Factory = New MVVM.VBStringFormatterFactory
+                Set Factory = New MVVM.StringFormatterVBFactory
                 
         End Select
     Else

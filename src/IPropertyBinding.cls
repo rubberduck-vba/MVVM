@@ -22,10 +22,16 @@ Public Enum BindingMode
 End Enum
 
 Public Enum BindingUpdateSourceTrigger
-    Never = 0
-    OnPropertyChanged = 1 '
-    OnKeyPress = 2 '
+    'VF: added NotSetYet  and renumbered enums
+    NotSetYet = 0 ''avoid being called twice, for runtime optimization
+    Never = 1
+    OnPropertyChanged = 2 '
+    OnKeyPress = 3 '
     OnExit = 4 '
+    
+    'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox
+    OnChange = 5
+    
 End Enum
 
 '@Description "Gets a value indicating the binding mode/direction."

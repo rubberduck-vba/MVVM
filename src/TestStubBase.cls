@@ -46,7 +46,7 @@ Attribute ToString.VB_Description = "Gets a string listing the MemberInvokes cac
     Dim MemberNames As Variant
     MemberNames = This.MemberInvokes.Keys
     
-    With New StringBuilder
+    With New StringBuilderNet
         Dim i As Long
         For i = LBound(MemberNames) To UBound(MemberNames)
             Dim Name As String

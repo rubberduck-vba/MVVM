@@ -44,6 +44,9 @@ End Property
 Public Property Get Item(ByVal PropertyName As String) As IValidationError
 Attribute Item.VB_Description = "Gets the IValidationError for the specified property; returns Nothing if there is no validation error."
 Attribute Item.VB_UserMemId = 0
+'QUESTION: 'VF: Can this be set via Ruberduck?   Attribute Item.VB_UserMemId = 0
+'I thought this were a trick I would be telling you as I think you did not mention it anywhere on your blog,  well you know them all ;-)
+'actually, this trick needs some explanations for other to understand how come this works
     Dim Result As IValidationError
     On Error Resume Next
     Set Result = This.ValidationErrors.Item(PropertyName)
@@ -62,6 +65,14 @@ End Property
 Public Property Get NewEnum() As IUnknown
 Attribute NewEnum.VB_Description = "Provides custom collection support for For Each enumeration."
 Attribute NewEnum.VB_UserMemId = -4
+'QUESTION: 'VF: Can this be set via Ruberduck?
+'Attribute NewEnum.VB_Description = "Provides custom collection support for For Each enumeration."
+'Attribute NewEnum.VB_UserMemId = -4
+'I thought this were a trick I would be telling you as I think you did not mention it anywhere on your blog,  well you know them all ;-)
+'actually, this trick needs some explanations for other to understand how come this works
+'regarding collections
+'http://dailydoseofexcel.com/archives/2010/07/04/custom-collection-class/
+'Attribute NewEnum.VB_MemberFlags = "40" 'for each/next in collection
     Set NewEnum = This.ValidationErrors.[_NewEnum]
 End Property
 

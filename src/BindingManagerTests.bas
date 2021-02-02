@@ -58,7 +58,7 @@ End Sub
 Private Sub TestInitialize()
     Set Test.CommandManager = New TestCommandManager
     Set Test.CommandManagerStub = Test.CommandManager
-    Set Test.ConcreteSUT = BindingManager.Create(Test.CommandManager, New StringFormatterFactory)
+    Set Test.ConcreteSUT = BindingManager.Create(Test.CommandManager, New StringFormatterNetFactory)
     Set Test.AbstractSUT = Test.ConcreteSUT
     Set Test.HandlePropertyChangedSUT = Test.ConcreteSUT
     Set Test.BindingSource = New TestBindingObject
@@ -109,7 +109,7 @@ Private Sub Create_GuardsNonDefaultInstance()
     With New BindingManager
         On Error Resume Next
             '@Ignore FunctionReturnValueDiscarded, FunctionReturnValueNotUsed
-            .Create Test.CommandManager, New StringFormatterFactory
+            .Create Test.CommandManager, New StringFormatterNetFactory
             ExpectError
         On Error GoTo 0
     End With

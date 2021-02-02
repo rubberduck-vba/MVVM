@@ -5,7 +5,7 @@ Attribute VB_Description = "Global, general-purpose procedures involving run-tim
 Option Explicit
 Option Private Module
 
-Public Const CustomError As Long = vbObjectError Or 32
+Public Const CustomError As Long = vbObjectError Or 32 'QUESTION: VF: why this value?
 
 '@Description("Re-raises the current error, if there is one.")
 Public Sub RethrowOnError()

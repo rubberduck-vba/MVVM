@@ -124,6 +124,7 @@ Private Sub OnValidationError(ByVal Context As Object, ByVal ValidationError As 
     End If
     
     Errors.Add ValidationError
+    Set This.ValidationErrors.Item(ContextKey) = Errors
 End Sub
 
 Private Sub Class_Initialize()

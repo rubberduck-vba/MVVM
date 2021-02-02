@@ -197,9 +197,19 @@ Private Function IDynamicControlBuilder_TextBoxFor(ByVal SourceValue As IBinding
     Set Result = This.Container.Add(MVVM.FormsProgID.TextBoxProgId)
     
     Dim Trigger As BindingUpdateSourceTrigger
-    If Validator Is Nothing Then
-        Trigger = Validator.Trigger
-    End If
+'    'VF: Logic error?: would always be zero and that means never // missing: if not validator is nothing then ??? trigger not picked up from validator
+'    'is updated later. Why not set here and skip update later?
+'    If Validator Is Nothing Then
+'        Trigger = Validator.Trigger '= 0 that is never
+''    '    'VF:
+''    '    Else ' set value of validator
+''    '        Trigger = Validator.Trigger
+''    '    End If
+'    End If
+    'VF: simplifies to unconditional
+    'but causes DecimalValuator::IValueValidator_Trigger() to be called twice
+    Trigger = Validator.Trigger
+    
     
     This.Context.Bindings.BindPropertyPath SourceValue.Context, SourceValue.Path, Result, _
         StringFormat:=FormatString, _

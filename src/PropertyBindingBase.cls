@@ -440,7 +440,7 @@ Private Function InsertKeypress(ByVal InitialValue As String, ByVal Char As Stri
         Case SelectionStart > 0 And SelectionLength = 0
             
             'insert at SelStart
-            With StringBuilder.Append(InitialValue) _
+            With StringBuilderNet.Append(InitialValue) _
                               .Insert(SelectionStart, Char)
                 InsertKeypress = .ToString
             End With
@@ -448,7 +448,7 @@ Private Function InsertKeypress(ByVal InitialValue As String, ByVal Char As Stri
         Case SelectionStart > 0 And SelectionLength > 0
             
             'replace selection
-            With StringBuilder.Append(InitialValue) _
+            With StringBuilderNet.Append(InitialValue) _
                               .Remove(SelectionStart, SelectionLength) _
                               .Insert(SelectionStart, Char)
                      
@@ -542,7 +542,7 @@ CleanFail:
     DebugMessage "IValueConverter failed with error " & Err.Number & ": " & Err.Description
     OnEnter
     CustomErrors.RethrowOnError
-    Resume CleanExit
+    Resume CleanExit 'NOTE: 'VF: is never reached
 End Function
 
 Public Function Validate(ByVal TargetValue As Variant, Optional ByVal Propagate As Boolean = True) As Boolean
@@ -573,7 +573,8 @@ Public Function Validate(ByVal TargetValue As Variant, Optional ByVal Propagate 
                 ValidationError:=ValidationError.Create(Me, Message)
             
             If Not This.ValidationAdorner Is Nothing Then This.ValidationAdorner.Show Message
-            OnEnter
+            'VF: commented out as it leads to select all, which is not desired in text and numeric textboxes even though there may be more than one eventhandler
+            'OnEnter
         End If
     End If
         
@@ -630,6 +631,14 @@ Private Sub OnBeforeUpdate(ByRef Cancel As Boolean)
         If Cancel Then Exit For
     Next
 End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox
+Private Sub OnChange()
+    Format
+    Dim Handler As IHandleControlEvents
+    For Each Handler In This.Handlers
+        Handler.HandleChange
+    Next
+End Sub
 
 Private Sub OnEnter()
     Dim Handler As IHandleControlEvents
@@ -652,10 +661,15 @@ Public Sub OnBindingUpdateSourceOpportunity(ByRef Cancel As Boolean, ByVal Trigg
     Dim Result As MVVM.ApplyResult
     Select Case Trigger
         
-        Case BindingUpdateSourceTrigger.OnKeyPress
+        'VF: ? remove OnKeyPress here?, at least in TextBox no longer used
+        'VF: changed: required to capture Cut/Paste and Backspace/Delete in TextBox
+        'Case BindingUpdateSourceTrigger.OnKeyPress
+        Case BindingUpdateSourceTrigger.OnKeyPress, BindingUpdateSourceTrigger.OnChange
         
-            If This.UpdateSourceTrigger = OnKeyPress And Not IsMissing(TargetValidationValue) Then
-                'just validate the keypress
+            'If This.UpdateSourceTrigger = OnKeyPress And Not IsMissing(TargetValidationValue) Then
+            If (This.UpdateSourceTrigger = OnKeyPress Or This.UpdateSourceTrigger = MVVM.BindingUpdateSourceTrigger.OnChange) _
+                And Not IsMissing(TargetValidationValue) Then
+                'just validate the keypress 'VF: or string pasted
                 Result = IIf(Validate(TargetValidationValue), _
                     ApplyResult.BindingSuccess, _
                     ApplyResult.BindingValidationError)
@@ -722,6 +736,10 @@ Private Sub IControlEvents_OnBeforeUpdate(ByVal Cancel As MSForms.IReturnBoolean
     OnBeforeUpdate LocalCancel
     Cancel.Value = LocalCancel
 End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox
+Private Sub IControlEvents_OnChange()
+    OnChange
+End Sub
 
 Private Sub IControlEvents_OnEnter()
     OnEnter
@@ -754,8 +772,11 @@ Private Sub IHandleControlEvents_HandleAfterUpdate()
 End Sub
 
 Private Sub IHandleControlEvents_HandleBeforeUpdate(ByRef Cancel As Boolean)
-    
     OnBeforeUpdate Cancel
+End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox
+Private Sub IHandleControlEvents_HandleChange()
+    OnChange
 End Sub
 
 Private Sub IHandleControlEvents_HandleEnter()

@@ -28,7 +28,7 @@ End Type
 #If VBA7 Then
 Private Declare PtrSafe Function ConnectToConnectionPoint Lib "shlwapi" Alias "#168" (ByVal Punk As stdole.IUnknown, ByRef riidEvent As GUID, ByVal fConnect As Long, ByVal PunkTarget As stdole.IUnknown, ByRef pdwCookie As Long, Optional ByVal ppcpOut As LongPtr) As Long
 #Else
-Private Declare Function ConnectToConnectionPoint Lib "shlwapi" Alias "#168" (ByVal punk As stdole.IUnknown, ByRef riidEvent As GUID, ByVal fConnect As Long, ByVal punkTarget As stdole.IUnknown, ByRef pdwCookie As Long, Optional ByVal ppcpOut As Long) As Long
+Private Declare Function ConnectToConnectionPoint Lib "shlwapi" Alias "#168" (ByVal Punk As stdole.IUnknown, ByRef riidEvent As GUID, ByVal fConnect As Long, ByVal PunkTarget As stdole.IUnknown, ByRef pdwCookie As Long, Optional ByVal ppcpOut As Long) As Long
 #End If
 
 Private Type TState
@@ -120,6 +120,14 @@ Attribute OnEnter.VB_UserMemId = -2147384830
         Handler.HandleEnter
     Next
 End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox, replaced OnKeyPress in TextBox
+'@Description "A callback that handles MSForms.Control.Change events for the registered target control."
+Public Sub OnChange()
+    Dim Handler As IHandleControlEvents
+    For Each Handler In This.Handlers
+        Handler.HandleChange
+    Next
+End Sub
 
 '@Description "Registers the specified object to handle the relayed control events."
 Public Sub RegisterHandler(ByVal Handler As IHandleControlEvents)
@@ -144,6 +152,10 @@ End Sub
 
 Private Sub IControlEvents_OnBeforeUpdate(ByVal Cancel As MSForms.IReturnBoolean)
     OnBeforeUpdate Cancel
+End Sub
+'VF: added: required to capture Cut/Paste and Backspace/Delete in TextBox control, basically replacing OnKeyPress in TextBox
+Private Sub IControlEvents_OnChange()
+    OnChange
 End Sub
 
 Private Sub IControlEvents_OnEnter()

@@ -28,3 +28,12 @@ End Sub
 
 Public Sub OnBeforeUpdate(ByVal Cancel As MSForms.IReturnBoolean)
 End Sub
+
+'VF: event to capture BackSpace/Delete as well as Paste new tex /Cut all text in TextBox
+'VF: paste/delete/cut easiest captured by _change, alternatively fiddle with KeyCodes
+'see userform ExploreTextboxEvents
+'Private Sub TextBox1_Change()
+'    Label1.Caption = Label1.Caption & vbLf & "TextBox1_Change"
+'End Sub
+Public Sub OnChange()
+End Sub

@@ -18,7 +18,7 @@ Option Explicit
 Public Function TryDispose(ByVal Target As Object, Optional ByVal TryLateBound As Boolean = False) As Boolean
 Attribute TryDispose.VB_Description = "True if a Dispose method was successfully invoked (early-bound IDisposable.Dispose unless specified otherwise)."
     Dim DisposableTarget As IDisposable
-    If TryCast(Target, outResult:=DisposableTarget) Then
+    If TryCastToDisposable(Target, outResult:=DisposableTarget) Then
         DisposableTarget.Dispose
         TryDispose = True
     ElseIf TryLateBound Then
@@ -29,9 +29,9 @@ Attribute TryDispose.VB_Description = "True if a Dispose method was successfully
     End If
 End Function
 
-Private Function TryCast(ByVal Target As Object, ByRef outResult As IDisposable) As Boolean
+Private Function TryCastToDisposable(ByVal Target As Object, ByRef outResult As IDisposable) As Boolean
     If TypeOf Target Is IDisposable Then
         Set outResult = Target
-        TryCast = True
+        TryCastToDisposable = True
     End If
 End Function
